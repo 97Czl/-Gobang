@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 import java.io.*;
+import java.util.*;
 
 public class GobangInWindow
 {
@@ -55,9 +56,9 @@ public class GobangInWindow
 		select = ImageIO.read(new File("select.jpg"));
 		
 		//对数组进行初始化.所有值赋为0
-		for (var i = 0; i < TABLE_SIZE; i++)
+		for (int i = 0; i < TABLE_SIZE; i++)
 		{
-			for (var j = 0; j < TABLE_SIZE; j++)
+			for (int j = 0; j < TABLE_SIZE; j++)
 			{
 				board[i][j] = 0;
 			}
@@ -71,8 +72,8 @@ public class GobangInWindow
 			public void mouseClicked(MouseEvent e)
 			{
 				//将该点所属的位置的数组赋值
-				var xPos = Math.round((e.getX() - X_OFFSET) / (RATE_WIDTH * 1.0f));
-				var yPos = Math.round((e.getY() - Y_OFFSET) / (RATE_HEIGHT * 1.0f));
+				int xPos = Math.round((e.getX() - X_OFFSET) / (RATE_WIDTH * 1.0f));
+				int yPos = Math.round((e.getY() - Y_OFFSET) / (RATE_HEIGHT * 1.0f));
 				if (RESULT == 0 && board[xPos][yPos] == 0)
 				{
 					board[xPos][yPos] = FLAG ? 1 : 2;
@@ -134,49 +135,49 @@ public class GobangInWindow
 	private int ifVictory(int row, int column)
 	{
 		//保存四个方向上的棋子
-		String chessInColumn = "";
-		String chessInrow = "";
-		String chessInUp = "";
-		String chessInDown = "";
+		StringBuilder chessInColumn = new StringBuilder();
+        StringBuilder chessInrow = new StringBuilder();
+        StringBuilder chessInUp = new StringBuilder();
+        StringBuilder chessInDown = new StringBuilder();
 
 		//成功的案例是连续五个相同棋子
 		String chessInVictory = "" + board[row][column] + board[row][column] + board[row][column] + board[row][column] + board[row][column];
 
 		//判断该点所处的四个方向是否构成连续的五子
 		//先判断该行
-		for (var i = -4; i < 5; i++)
-		{
-			if ((row + i) < 0 || (row + i) >= TABLE_SIZE )
-			{}
-			else 
-			{
-				chessInrow = chessInrow + board[row + i][column];
-			};
+		for (int i = -4; i < 5; i++)
+        {
+            if ((row + i) < 0 || (row + i) >= TABLE_SIZE )
+            {}
+            else
+            {
+                chessInrow.append(board[row + i][column]);
+            };
 
-			if ((column + i) < 0 || (column + i) >= TABLE_SIZE)
-			{}
-			else
-			{
-				chessInColumn = chessInColumn + board[row][column + i];
-			};
+            if ((column + i) < 0 || (column + i) >= TABLE_SIZE)
+            {}
+            else
+            {
+                chessInColumn.append(board[row][column + i]);
+            };
 
-			for (var j = -4; j < 5; j++)
-			{
-				if (i != j)
-				{
-					continue;
-				};
-				if (((column + j) < TABLE_SIZE && (column + j) >= 0) && ((row - i) < TABLE_SIZE && (row - i) >= 0))
-				{
-					chessInUp = chessInUp + board[row - i][column + j];
-				};
-				if (((column + j) < TABLE_SIZE && (column + j) >= 0) && ((row + i) < TABLE_SIZE && (row + i) >= 0))
-				{
-					chessInDown = chessInDown + board[row + i][column + j];
-				};
-			}
-		}
-		if (chessInColumn.contains(chessInVictory) || chessInrow.contains(chessInVictory) || chessInUp.contains(chessInVictory) || chessInDown.contains(chessInVictory) )
+            for (int j = -4; j < 5; j++)
+            {
+                if (i != j)
+                {
+                    continue;
+                };
+                if (((column + j) < TABLE_SIZE && (column + j) >= 0) && ((row - i) < TABLE_SIZE && (row - i) >= 0))
+                {
+                    chessInUp.append(board[row - i][column + j]);
+                };
+                if (((column + j) < TABLE_SIZE && (column + j) >= 0) && ((row + i) < TABLE_SIZE && (row + i) >= 0))
+                {
+                    chessInDown.append(board[row + i][column + j]);
+                };
+            }
+        }
+		if (chessInColumn.toString().contains(chessInVictory) || chessInrow.toString().contains(chessInVictory) || chessInUp.toString().contains(chessInVictory) || chessInDown.toString().contains(chessInVictory) )
 		{
 			return FLAG ? 1 : 2;
 		}
@@ -209,9 +210,9 @@ public class GobangInWindow
 				g.drawImage(select, selectX * RATE_WIDTH + X_OFFSET - RATE_WIDTH / 8, selectY * RATE_HEIGHT + Y_OFFSET - RATE_HEIGHT / 8, RATE_WIDTH / 4, RATE_HEIGHT / 4, null);
 			}  
 			//遍历数组绘制棋子
-			for (var i = 0; i < TABLE_SIZE; i++)
+			for (int i = 0; i < TABLE_SIZE; i++)
 			{
-				for (var j = 0; j < TABLE_SIZE; j++)
+				for (int j = 0; j < TABLE_SIZE; j++)
 				{
 					//绘制黑棋
 					if (board[i][j] == 1)
